@@ -51,7 +51,7 @@ parser.add_argument('--weight_decay', default=5e-4, type=float,
                     help='Weight decay for SGD')
 parser.add_argument('--gamma', default=0.1, type=float,
                     help='Gamma update for SGD')
-parser.add_argument('--visdom', default='VOC',type=str,
+parser.add_argument('--visdom', default='VOC',type=str2bool,
                     help='Use visdom')
 parser.add_argument('--work_dir', default='work_dir/',
                     help='Directory for saving checkpoint models')
@@ -130,6 +130,8 @@ def train():
 
     if args.cuda:
         net = ssd_net.cuda()
+    else:
+        net = ssd_net.cpu()
     net.train()
 
     #optimizer

@@ -70,12 +70,17 @@ class IouLoss(nn.Module):
         self.variances = variances
         self.loss = losstype
     def forward(self, loc_p, loc_t,prior_data):
+        print(loc_p.size())
+        print(loc_t.size())
+        print(prior_data.size())
         num = loc_p.shape[0] 
         
         if self.pred_mode == 'Center':
             decoded_boxes = decode(loc_p, prior_data, self.variances)
         else:
             decoded_boxes = loc_p
+            
+        print(decoded_boxes.size())
         if self.loss == 'Iou':
             loss = torch.sum(1.0 - bbox_overlaps_iou(decoded_boxes, loc_t))
         else:
@@ -154,6 +159,10 @@ class MultiBoxLoss(nn.Module):
                 shape: [batch_size,num_objs,5] (last idx is the label).
         """
         loc_data, conf_data, priors = predictions
+        print("out loc_data: ", loc_data.size())
+        print("out conf_data: ", conf_data.size())
+        print("out priors: ", priors.size())
+        print("out targets: ", targets.shape)
         num = loc_data.size(0)
        
         priors = priors[:loc_data.size(1), :]
